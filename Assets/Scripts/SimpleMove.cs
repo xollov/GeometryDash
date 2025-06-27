@@ -6,23 +6,48 @@ public class SimpleMove : MonoBehaviour
     public bool isGrounded;
     public bool isDead = false;
     public float jumpForce = 10f;
+    public float flyForce = 1f;
+    public float velocityCap = 5;
     public float speed = 2f;
     public GameObject particle;
     public GameObject renderer;
+    public GameObject shipRenderer;
+    public ModeType currentMode;
     Vector3 startPos;
     void Awake() 
     {
+        SwitchMode(ModeType.Cube);
         startPos = transform.position;
         rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-       if (isGrounded && Input.GetMouseButton(0)) 
-       {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            isGrounded = false;
-       } 
+        switch (currentMode) 
+        {
+            case ModeType.Cube:
+                if (isGrounded && Input.GetMouseButton(0)) 
+                {
+                    rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                    isGrounded = false;
+                }
+                break;
+            case ModeType.Fly:
+                if(Input.GetMouseButton(0)) 
+                {
+                    rb.AddForce(Vector2.up * flyForce, ForceMode2D.Impulse);
+                    if (rb.linearVelocity.y > velocityCap) 
+                    {
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, velocityCap);
+                    }
+                    if (rb.linearVelocity.y < -velocityCap) 
+                    {
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, -velocityCap);
+                    }
+                }
+                break;
+        }
+        
     }
     void FixedUpdate() 
     {
@@ -52,11 +77,20 @@ public class SimpleMove : MonoBehaviour
         {
             print("WIN");
         }
+        if (other.TryGetComponent<Portal>(out var mode)) 
+        {
+           SwitchMode(mode.portalType); 
+        }
     }
     void Respawn()
     {
         renderer.SetActive(true);
         transform.position = startPos;
         isDead = false;
+    }
+    void SwitchMode(ModeType mode)
+    {
+        currentMode = mode;
+        shipRenderer.SetActive(mode == ModeType.Fly);
     }
 }
