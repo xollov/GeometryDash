@@ -10,15 +10,15 @@ public class SimpleMove : MonoBehaviour
     public float velocityCap = 5;
     public float speed = 2f;
     public GameObject particle;
-    public GameObject renderer;
-    public GameObject shipRenderer;
+    public GameObject[] renderers;
+    public ModeType startMode;
     public ModeType currentMode;
     Vector3 startPos;
     void Awake() 
     {
-        SwitchMode(ModeType.Cube);
-        startPos = transform.position;
         rb = GetComponent<Rigidbody2D>();
+        SwitchMode(startMode);
+        startPos = transform.position;
     }
 
     void Update()
@@ -46,6 +46,12 @@ public class SimpleMove : MonoBehaviour
                     }
                 }
                 break;
+            case ModeType.Wheel:
+                if(isGrounded && Input.GetMouseButtonDown(0))
+                {
+                    rb.gravityScale = -rb.gravityScale;
+                }
+                break;
         }
         
     }
@@ -65,10 +71,9 @@ public class SimpleMove : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other) 
     {
-        print("Trigger");
-        if (other.gameObject.tag == "Obstacle")
+        if (other.gameObject.tag == "Obstacle" && !isDead)
         {
-            renderer.SetActive(false);
+            foreach (var r in renderers)r.SetActive(false);
             Instantiate(particle,transform.position, Quaternion.identity);
             isDead = true;
             Invoke("Respawn", 0.5f);
@@ -84,13 +89,30 @@ public class SimpleMove : MonoBehaviour
     }
     void Respawn()
     {
-        renderer.SetActive(true);
+        SwitchMode(startMode);
         transform.position = startPos;
         isDead = false;
     }
     void SwitchMode(ModeType mode)
     {
         currentMode = mode;
-        shipRenderer.SetActive(mode == ModeType.Fly);
+        if (rb.gravityScale < 0)
+        {
+            rb.gravityScale = -rb.gravityScale;
+        }
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].SetActive((int)mode == i);
+        }
+        switch(mode)
+        {
+            case ModeType.Cube:
+                break;
+            case ModeType.Fly:
+                renderers[0].SetActive(true);
+               break; 
+            case ModeType.Wheel:
+                break;
+        } 
     }
 }
