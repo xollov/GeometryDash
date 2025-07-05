@@ -13,7 +13,7 @@ public class LevelUI : MonoBehaviour
     public Image progressBar;
     public TMP_Text progressText;
     float currentMax;
-    string scoreKey;
+    string progressKey;
 
     public GameObject pauseButton;
     public GameObject menuPanel;
@@ -27,10 +27,10 @@ public class LevelUI : MonoBehaviour
     void Start()
     {
         scene = SceneManager.GetActiveScene();
-        scoreKey = $"{scene.name}_score";
+        progressKey = $"{scene.buildIndex}_progress";
         xStart = player.transform.position.x;
         totalDistance = finish.position.x - player.transform.position.x;
-        currentMax = PlayerPrefs.GetFloat(scoreKey, 0);
+        currentMax = PlayerPrefs.GetFloat(progressKey, 0);
     }
     void Update()
     {
@@ -43,22 +43,38 @@ public class LevelUI : MonoBehaviour
             SaveScore();
             finishPanel.SetActive(true);
 
+            int starCounter = 0;
             for(int i = 0; i < 3; i++)
             {
-                starImages[i].color = stars[i].gameObject.activeSelf ? new Color(1, 1, 1, 0.2f) : new Color(1, 1, 1, 1);
+                if (!stars[i].gameObject.activeSelf)
+                {
+                    starCounter++;
+                    starImages[i].color =  new Color(1, 1, 1, 1);
+                }
+                else 
+                {
+                    starImages[i].color = new Color(1, 1, 1, 0.2f);
+                }
             }
+            int maxStars = PlayerPrefs.GetInt($"{scene.buildIndex}_stars", 0);
+            PlayerPrefs.SetInt($"{scene.buildIndex}_stars", Mathf.Max(maxStars, starCounter));
             Time.timeScale = 0;
             isWin = true;
         }
     }
     public void SaveScore()
     {
+        print($"Current max: {currentMax}\n current distance: {(player.transform.position.x - xStart) / totalDistance}");
         if ( (player.transform.position.x - xStart) / totalDistance > currentMax)
         {
             currentMax =  (player.transform.position.x - xStart) / totalDistance;
             progressBar.fillAmount = currentMax;
             progressText.text = $"{(int)(currentMax * 100)}%";
-            PlayerPrefs.SetFloat(scoreKey, currentMax);
+            if (currentMax > 1) 
+            {
+                currentMax = 1;
+            }
+            PlayerPrefs.SetFloat(progressKey, currentMax);
         }
     }
 

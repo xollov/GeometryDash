@@ -22,6 +22,8 @@ public class Movement : MonoBehaviour
     public LevelUI ui;
     public TMP_Text attemptText;
     public int attemptCounter = 1;
+
+    public AudioPlayer audio;
     #endregion
 
     #region private
@@ -39,7 +41,7 @@ public class Movement : MonoBehaviour
        rb = GetComponent<Rigidbody2D>(); 
        currentGameMode = startGameMode;
        startPosition = transform.position;
-       attemptCounter = 0;
+       attemptCounter = 1;
     }
 
     // Update is called once per frame
@@ -226,11 +228,15 @@ public class Movement : MonoBehaviour
     }
     IEnumerator Respawn()
     {
+        print("Respawn");
+        audio.musicSource.Stop();
         isDead = true;
-        Destroy(Instantiate(particle, transform.position, Quaternion.identity), 0.5f);
+        var temp = Instantiate(particle, transform.position, Quaternion.identity);
         yield return new WaitForSeconds(0.4f);
-        Restart();
+
         ui.SaveScore();
+        Restart();
+        audio.musicSource.Play();
     }
     public void Restart()
     {
