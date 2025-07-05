@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public enum Speed {Slow, Normal, Fast, Faster, Fastest};
 public enum GameModes {Cube, Ship, UFO, Wheel, Spider, Wave, Robot};
@@ -18,6 +19,9 @@ public class Movement : MonoBehaviour
     public LayerMask groundLayer;
     public LayerMask obstacleLayer;
     public GameObject particle;
+    public LevelUI ui;
+    public TMP_Text attemptText;
+    public int attemptCounter = 1;
     #endregion
 
     #region private
@@ -35,6 +39,7 @@ public class Movement : MonoBehaviour
        rb = GetComponent<Rigidbody2D>(); 
        currentGameMode = startGameMode;
        startPosition = transform.position;
+       attemptCounter = 0;
     }
 
     // Update is called once per frame
@@ -224,8 +229,15 @@ public class Movement : MonoBehaviour
         isDead = true;
         Destroy(Instantiate(particle, transform.position, Quaternion.identity), 0.5f);
         yield return new WaitForSeconds(0.4f);
-        transform.position = startPosition;
+        Restart();
+        ui.SaveScore();
+    }
+    public void Restart()
+    {
+        attemptCounter += 1;
+        attemptText.text = $"Attempt: {attemptCounter}";
         currentGameMode = startGameMode;
+        transform.position = startPosition;
         isDead = false;
     }
 }

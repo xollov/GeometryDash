@@ -103,12 +103,12 @@ TextureImporter:
       name: PC Computer - Geometry Dash - Background 04_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1540
         y: 0
-        width: 3588
+        width: 2048
         height: 2050
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 4160eb9ce2974cf48a06924b3e1a385c
     internalID: 0
     vertices: []
     indices: 

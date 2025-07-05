@@ -22,7 +22,7 @@ public class CameraFollow : MonoBehaviour
             pos.y += ceilDelta;
         }
 
-        float floor   = transform.position.y - camera.orthographicSize - floorCap;
+        float floor = transform.position.y - camera.orthographicSize - floorCap;
         float floorDelta = player.position.y - floor;
         if (floorDelta < 0) 
         {
