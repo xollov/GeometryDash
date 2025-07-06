@@ -52,7 +52,6 @@ public class Movement : MonoBehaviour
 
         if (TouchingWall() || ObstacleTouch())
         {
-            print("Wall hit");
             StartCoroutine("Respawn");
         }
 
@@ -100,7 +99,6 @@ public class Movement : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 rb.linearVelocity = Vector2.up * initialVelocity * gravity;  
-                print("Jump");
             }
         }
         else 
@@ -132,7 +130,6 @@ public class Movement : MonoBehaviour
         LimitYVelocity(velocityLimit);
         if (Input.GetMouseButtonDown(0))
         {
-            print("UFO click");
             rb.linearVelocity = Vector2.up * initialVelocity * gravity;
         }
         rb.gravityScale = gravityValue * gravity;
@@ -228,7 +225,6 @@ public class Movement : MonoBehaviour
     }
     IEnumerator Respawn()
     {
-        print("Respawn");
         audio.musicSource.Stop();
         isDead = true;
         var temp = Instantiate(particle, transform.position, Quaternion.identity);
@@ -245,5 +241,9 @@ public class Movement : MonoBehaviour
         currentGameMode = startGameMode;
         transform.position = startPosition;
         isDead = false;
+        foreach(var star in ui.stars)
+        {
+            star.gameObject.SetActive(true);
+        }
     }
 }

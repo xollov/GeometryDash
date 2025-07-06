@@ -64,7 +64,6 @@ public class LevelUI : MonoBehaviour
     }
     public void SaveScore()
     {
-        print($"Current max: {currentMax}\n current distance: {(player.transform.position.x - xStart) / totalDistance}");
         if ( (player.transform.position.x - xStart) / totalDistance > currentMax)
         {
             currentMax =  (player.transform.position.x - xStart) / totalDistance;

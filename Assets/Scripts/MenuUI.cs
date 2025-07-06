@@ -12,7 +12,7 @@ public class MenuUI : MonoBehaviour
             float progress = PlayerPrefs.GetFloat($"{i+1}_progress", 0);
             int stars = PlayerPrefs.GetInt($"{i+1}_stars", 0);
             levels[i].progressBar.fillAmount = progress;
-            levels[i].progressText.text = $"{(int)progress * 100}%";
+            levels[i].progressText.text = $"{(int)(progress * 100)}%";
             for (int j = 0; j < 3; j++)
             {
                 levels[i].stars[j].color = 
@@ -26,5 +26,10 @@ public class MenuUI : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(id);
+    }
+    [ContextMenu("Reset PlayerPrefs")]
+    public void ResetPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
     }
 }
