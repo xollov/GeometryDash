@@ -1500,6 +1500,7 @@ MonoBehaviour:
   - {fileID: 432353029611511664}
   - {fileID: 8272356982258305505}
   - {fileID: 1127508390522265889}
+  finishAttemtText: {fileID: 8467968994207659153}
 --- !u!1 &4659867830930249763
 GameObject:
   m_ObjectHideFlags: 0

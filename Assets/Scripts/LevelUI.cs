@@ -21,6 +21,7 @@ public class LevelUI : MonoBehaviour
 
     public Star[] stars;
     public Image[] starImages;
+    public TMP_Text finishAttemtText;
 
     Scene scene;
     bool isWin = false;
@@ -31,6 +32,10 @@ public class LevelUI : MonoBehaviour
         xStart = player.transform.position.x;
         totalDistance = finish.position.x - player.transform.position.x;
         currentMax = PlayerPrefs.GetFloat(progressKey, 0);
+        
+        // set proggress bar 
+        progressBar.fillAmount = currentMax;
+        progressText.text = $"{(int)(currentMax * 100)}%";
     }
     void Update()
     {
@@ -59,6 +64,7 @@ public class LevelUI : MonoBehaviour
             int maxStars = PlayerPrefs.GetInt($"{scene.buildIndex}_stars", 0);
             PlayerPrefs.SetInt($"{scene.buildIndex}_stars", Mathf.Max(maxStars, starCounter));
             Time.timeScale = 0;
+            finishAttemtText.text = $"Attempts: {player.attemptCounter}";
             isWin = true;
         }
     }

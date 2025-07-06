@@ -67093,6 +67093,7 @@ MonoBehaviour:
   - {fileID: 1268926580}
   - {fileID: 879788214}
   - {fileID: 818554515}
+  finishAttemtText: {fileID: 1584423055}
 --- !u!4 &1477212214 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3063437516967667542, guid: ce7ebf37532e12a418f5cffe3cc70233, type: 3}
